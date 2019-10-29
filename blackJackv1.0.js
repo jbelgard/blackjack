@@ -78,3 +78,101 @@ function bet(outcome) {
     }
 }
 
+function resetGame() {
+    numCardsPulled = 0;
+    player.cards = [];
+    dealer.cards = [];
+    player.score = 0;
+    dealer.score = 0;
+    deck.initialize();
+    deck.shuffle();
+    document.getElementById('hit-button').disabled = true;
+    document.getElementById('stand-button').disabled = true;
+    document.getElementById('new-game-button').disabled = false;
+}
+
+function endGame() {
+    if (player.score === 21) {
+        document.getElementById('message-board').innerHTML = "You win!  You got blackjack." + '<br>' + 'click New Game to play again';
+        bet('win');
+        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        resetGame();
+    }
+    if (player.score > 21) {
+        document.getElementById('message-board').innerHTML = 'You went over 21!  The dealer wins' + '<br>' + 'click New Game to play again';
+        bet('lose');
+        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        resetGame();
+    }
+    if (dealer.score === 21) {
+        document.getElementById('message-board').innerHTML = 'You lost.  Dealer got blackjack' + '<br>' + 'click New Game to play again';
+        bet('lose');
+        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        resetGame();
+    }
+    if (dealer.score > 21) {
+        document.getElementById('message-board').innerHTML = 'Dealer went over 21! You win!' + '<br>' + 'click New Game to play again';
+        bet('win');
+        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        resetGame();
+    }
+    if (dealer.score >= 17 && player.score > dealer.score && player.score < 21) {
+        document.getElementById("message-board").innerHTML = "You win! You beat the dealer." + "<br>" + "click New Game to play again";
+        bet("win");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
+        resetGame();
+    }
+    if (dealer.score >= 17 && player.score < dealer.score && dealer.score < 21) {
+        document.getElementById("message-board").innerHTML = "You lost. Dealer had the higher score." + "<br>" + "click New Game to play again";
+        bet("lose");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
+        resetGame();
+    }
+    if (dealer.score >= 17 && player.score === dealer.score && dealer.score < 21) {
+        document.getElementById("message-board").innerHTML = "You tied! " + "<br>" + "click New Game to play again";
+        resetGame();
+    }
+    if (player.money === 0) {
+        document.getElementById("new-game-button").disabled = true;
+        document.getElementById("hit-button").disabled = true;
+        document.getElementById("stand-button").disabled = true;
+        document.getElementById("message-board").innerHTML = "You lost!" + "<br>" + "You are out of money";
+    }
+}
+
+function dealerDraw() {
+    dealer.cards.push(deck.deckArray[numCardsPulled]);
+    dealer.score = getCardsValue(dealer.cards);
+    document.getElementById('dealer-cards').innerHTML = 'Dealer cards: ' + JSON.stringify(dealer.cards);
+    document.getElementById('dealer-score').innerHTML = 'Dealer Score: ' + dealer.score;
+    numCardsPulled += 1;
+}
+
+function newGame() {
+    document.getElementById('new-game-button').disabled = true;
+    document.getElementById('hit-button').disabled = false;
+    document.getElementById('stand-button').disabled = false;
+    document.getElementById('message-board').innerHTML = '';
+    hit();
+    hit();
+    dealerDraw();
+    endGame();
+}
+
+function hit() {
+    player.cards.push(deck.deckArray[numCardsPulled]);
+    player.score = getCardsValue(player.cards);
+    document.getElementById('player-cards').innerHTML = 'Player Cards: ' + JSON.stringify(player.cards);
+    document.getElementById('player-score').innerHTML = 'Player Score: ' + player.score;
+    numCardsPulled += 1;
+    if (numCardsPulled > 3) {
+        endGame();
+    }
+}
+
+function stand() {
+    while (dealer.score < 17) {
+        dealerDraw();
+    }
+    endGame();
+}
