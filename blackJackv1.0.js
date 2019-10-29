@@ -67,3 +67,14 @@ var deck = {
 
 deck.initialize();
 deck.shuffle();
+
+function bet(outcome) {
+    var playerBet = document.getElementById('bet').valueAsNumber;
+    if (outcome === 'win') {
+        player.money += playerBet;
+    }
+    if (outcome === 'loose') {
+        player.money -= playerBet;
+    }
+}
+
