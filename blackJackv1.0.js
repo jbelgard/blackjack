@@ -3,18 +3,18 @@
 var numCardsPulled = 0;
 
 var player = {
-    cards: [],
-    score: 0,
-    money: 100
-};
+        cards: [],
+        score: 0,
+        money: 100
+    };
 var dealer = {
     cards: [],
     score: 0
 };
 
-document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
-document.getElementById('hit-button').disabled = true;
-document.getElementById('stand-button').disabled = true;
+document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
+document.getElementById("hit-button").disabled = true;
+document.getElementById("stand-button").disabled = true;
 
 function getCardsValue(a) {
     var cardArray = [],
@@ -23,12 +23,12 @@ function getCardsValue(a) {
         aceCount = 0;
     cardArray = a;
     for (i; i < cardArray.length; i += 1) {
-        if (cardArray[i].rank === ']' || cardArray[i].rank === 'Q' || cardArray[i].rank === 'K') {
+        if (cardArray[i].rank === "J" || cardArray[i].rank === "Q" || cardArray[i].rank === "K") {
             sum += 10;
-        } else if (cardArray[i].rank === 'A') {
+        } else if (cardArray[i].rank === "A") {
             sum += 11;
             aceCount += 1;
-        }else {
+        } else {
             sum += cardArray[i].rank;
         }
     }
@@ -40,40 +40,41 @@ function getCardsValue(a) {
 }
 
 var deck = {
-    deckArray: [],
-    initialize: function () {
-        var suitArray, rankArray, s, r;
-        suitArray = ['clubs', 'diamonds', 'hearts', 'spades'];
-        rankArray = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'];
-        for (s = 0; s < suitArray.length; s += 1) {
-            for (r = 0; r < rankArray.length; r += 1) {
-                this.deckArray[s * 13 + r] = {
-                    rank: rankArray[r],
-                    suit: suitArray[s]
-                };
+        deckArray: [],
+        initialize: function () {
+            var suitArray, rankArray, s, r;
+            suitArray = ["clubs", "diamonds", "hearts", "spades"];
+            rankArray = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
+            for (s = 0; s < suitArray.length; s += 1) {
+                for (r = 0; r < rankArray.length; r += 1) {
+                    this.deckArray[s * 13 + r] = {
+                        rank: rankArray[r],
+                        suit: suitArray[s]
+
+                    };
+                }
+            }
+        },
+        shuffle: function () {
+            var temp, i, rnd;
+            for (i = 0; i < this.deckArray.length; i += 1) {
+                rnd = Math.floor(Math.random() * this.deckArray.length);
+                temp = this.deckArray[i];
+                this.deckArray[i] = this.deckArray[rnd];
+                this.deckArray[rnd] = temp;
             }
         }
-    },
-    shuffle: function () {
-        var temp, i, rnd;
-        for (i = 0; i < this.deckArray.length; i += 1) {
-            rnd = Math.floor(Math.random() * this.deckArray.length);
-            temp = this.deckArray[i];
-            this.deckArray[i] = this.deckArray[rnd];
-            this.deckArray[rnd = temp];
-        }
-    }
-};
+    };
 
 deck.initialize();
 deck.shuffle();
 
 function bet(outcome) {
-    var playerBet = document.getElementById('bet').valueAsNumber;
-    if (outcome === 'win') {
+    var playerBet = document.getElementById("bet").valueAsNumber;
+    if (outcome === "win") {
         player.money += playerBet;
     }
-    if (outcome === 'loose') {
+    if (outcome === "lose") {
         player.money -= playerBet;
     }
 }
@@ -86,34 +87,34 @@ function resetGame() {
     dealer.score = 0;
     deck.initialize();
     deck.shuffle();
-    document.getElementById('hit-button').disabled = true;
-    document.getElementById('stand-button').disabled = true;
-    document.getElementById('new-game-button').disabled = false;
+    document.getElementById("hit-button").disabled = true;
+    document.getElementById("stand-button").disabled = true;
+    document.getElementById("new-game-button").disabled = false;
 }
 
 function endGame() {
     if (player.score === 21) {
-        document.getElementById('message-board').innerHTML = "You win!  You got blackjack." + '<br>' + 'click New Game to play again';
-        bet('win');
-        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        document.getElementById("message-board").innerHTML = "You win! You got blackjack." + "<br>" + "click New Game to play again";
+        bet("win");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
         resetGame();
     }
     if (player.score > 21) {
-        document.getElementById('message-board').innerHTML = 'You went over 21!  The dealer wins' + '<br>' + 'click New Game to play again';
-        bet('lose');
-        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        document.getElementById("message-board").innerHTML = "You went over 21! The dealer wins" + "<br>" + "click New Game to play again";
+        bet("lose");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
         resetGame();
     }
     if (dealer.score === 21) {
-        document.getElementById('message-board').innerHTML = 'You lost.  Dealer got blackjack' + '<br>' + 'click New Game to play again';
-        bet('lose');
-        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        document.getElementById("message-board").innerHTML = "You lost. Dealer got blackjack" + "<br>" + "click New Game to play again";
+        bet("lose");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
         resetGame();
     }
     if (dealer.score > 21) {
-        document.getElementById('message-board').innerHTML = 'Dealer went over 21! You win!' + '<br>' + 'click New Game to play again';
-        bet('win');
-        document.getElementById('player-money').innerHTML = 'Your money: $' + player.money;
+        document.getElementById("message-board").innerHTML = "Dealer went over 21! You win!" + "<br>" + "click New Game to play again";
+        bet("win");
+        document.getElementById("player-money").innerHTML = "Your money: $" + player.money;
         resetGame();
     }
     if (dealer.score >= 17 && player.score > dealer.score && player.score < 21) {
@@ -141,18 +142,19 @@ function endGame() {
 }
 
 function dealerDraw() {
+    
     dealer.cards.push(deck.deckArray[numCardsPulled]);
     dealer.score = getCardsValue(dealer.cards);
-    document.getElementById('dealer-cards').innerHTML = 'Dealer cards: ' + JSON.stringify(dealer.cards);
-    document.getElementById('dealer-score').innerHTML = 'Dealer Score: ' + dealer.score;
+    document.getElementById("dealer-cards").innerHTML = "Dealer Cards: " + JSON.stringify(dealer.cards);
+    document.getElementById("dealer-score").innerHTML = "Dealer Score: " + dealer.score;
     numCardsPulled += 1;
 }
 
 function newGame() {
-    document.getElementById('new-game-button').disabled = true;
-    document.getElementById('hit-button').disabled = false;
-    document.getElementById('stand-button').disabled = false;
-    document.getElementById('message-board').innerHTML = '';
+    document.getElementById("new-game-button").disabled = true;
+    document.getElementById("hit-button").disabled = false;
+    document.getElementById("stand-button").disabled = false;
+    document.getElementById("message-board").innerHTML = "";
     hit();
     hit();
     dealerDraw();
@@ -162,10 +164,10 @@ function newGame() {
 function hit() {
     player.cards.push(deck.deckArray[numCardsPulled]);
     player.score = getCardsValue(player.cards);
-    document.getElementById('player-cards').innerHTML = 'Player Cards: ' + JSON.stringify(player.cards);
-    document.getElementById('player-score').innerHTML = 'Player Score: ' + player.score;
+    document.getElementById("player-cards").innerHTML = "Player Cards: " + JSON.stringify(player.cards);
+    document.getElementById("player-score").innerHTML = "Player Score: " + player.score;
     numCardsPulled += 1;
-    if (numCardsPulled > 3) {
+    if (numCardsPulled > 2) {
         endGame();
     }
 }
